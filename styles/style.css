@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'OpenSansRegular';
+    src: url('../fonts/OpenSans-Regular-webfont.eot');
+    src: url('../fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/OpenSans-Regular-webfont.woff') format('woff'),
+         url('../fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
+         url('../fonts/OpenSans-Regular-webfont.svg#OpenSansRegular') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}    
+    
+
+body{
+	background:url(../images/bg-sandstone-2.png);
+	}
+
+body:after {
+	position:absolute;
+	top:0;
+	right:10px;
+	width:153px;
+	height:41px;
+	background:url(../images/tab-2.png);
+	content:'';
+	}
+.btn {
+  background: #3498db;
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 12;
+  border-radius: 12px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 6px 14px 6px 14px;
+  text-decoration: none;
+  width: 100px
+}
+
+.btn:hover {
+  background: #0095DD;
+  background-image: -moz-linear-gradient(top, #0095DD, #00539F);
+  background-image: linear-gradient(to bottom, #0095DD, #00539F);
+  text-decoration: none;
+}
+    section { border:0px solid gray; padding:10px; overflow:hidden; }
+    section > section { float:left; }
+    .indent-1 { padding-left:120px; }
+    
+h1 {
+		color: #4D4E53; font:bold 20px/1 'OpenSansRegular', sans-serif;
+}

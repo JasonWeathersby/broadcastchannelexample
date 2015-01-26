@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Test for BroadcastChannel</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+
+    <section class="indent-style">
+        <!-- Section 1 -->
+        <section>
+            <nav>
+                <h1>Message Source</h1>
+                <div style="height:30px">
+                    <a class="btn" id="post">Post Blob</a>
+                    <a class="btn" id="postDate">Post Date</a>
+                    <a class="btn" id="postString">Post String</a>
+                </div>
+                <div>
+                    <a class="btn" id="postWorker">Post in Worker</a>
+                    <a class="btn" id="postIframe">Add Iframe</a>
+                </div>
+            </nav>
+            <section>
+                <img id="ffimg" src="images/firefox.png">
+            </section>
+
+        </section>
+
+        <!-- Section 2 -->
+        <section>
+            <section>
+                <div id="iframetitle"></div>
+                <div id="content"></div>
+            </section>
+        </section>
+    </section>
+
+
+    <script type="application/javascript">
+        var channel;
+        var gBlob;
+
+        function setupChannel() {
+            if ("BroadcastChannel" in window) {
+                if (typeof channel === 'undefined' || !channel) {
+                    channel = new BroadcastChannel('foo');
+                }
+            }
+        }
+
+        function postMessage() {
+            setupChannel();
+            var img = document.getElementById("ffimg");
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(function(blob) {
+                channel.postMessage(blob);
+            });
+        }
+
+        function postIframe() {
+            var div = document.getElementById("content");
+
+            div.innerHTML = "";
+            var ifr = document.createElement("iframe");
+            ifr.style.width = "400px";
+            ifr.style.height = "335px";
+            ifr.setAttribute('src', "pagetwo.html");
+            ifr.addEventListener("load", iframeLoaded, false);
+            div.appendChild(ifr);
+
+        }
+
+        function iframeLoaded() {
+            var t = document.getElementById("iframetitle");
+            t.innerHTML = "<h1>Iframe Message Target</h1>"
+        }
+
+        function setup() {
+            var post = document.getElementById("post");
+            post.onclick = function() {
+                postMessage();
+            }
+
+            var post = document.getElementById("postIframe");
+            post.onclick = function() {
+                postIframe();
+            }
+            var postDate = document.getElementById("postDate");
+            postDate.onclick = function() {
+                setupChannel();
+                channel.postMessage(new Date);
+            }
+            var postString = document.getElementById("postString");
+            postString.onclick = function() {
+                setupChannel();
+                channel.postMessage("This is a test Broadcast String");
+            }
+            var postWorker = document.getElementById("postWorker");
+            postWorker.onclick = function() {
+                setupChannel();
+                if (!!window.Worker) {
+                    var myWorker = new Worker("worker.js");
+                    myWorker.onmessage = function(e) {
+                        console.log('Message received from Worker: ' + e.data);
+                    }
+                    myWorker.postMessage("Broadcast from Worker");
+                }
+
+            }
+
+        }
+        window.onload = setup();
+    </script>
+
+
+</body>
+
+</html>

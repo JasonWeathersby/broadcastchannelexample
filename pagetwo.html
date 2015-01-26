@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Test for BroadcastChannel</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <section>
+        <nav>
+            <h1>Message Target Window</h1>
+            <a class="btn" id="closeChannel">Close Channel</a>
+            <a class="btn" id="openChannel">Open Channel</a>
+        </nav>
+        <section>
+            <div id="content" style="width: 100%;"></div>
+        </section>
+    </section>
+    <script type="application/javascript">
+        var channel;
+        function getType(a) {
+            if (a === null || a === undefined)
+                return 'null';
+            if (Array.isArray(a))
+                return 'array';
+            if (typeof a == 'object') {
+                if (a instanceof Date) {
+                    return 'date';
+                }
+                if (a instanceof Blob) {
+                    return 'blob';
+                }
+                return 'object';
+            }
+            if (typeof a === 'date')
+                return 'date';
+            return 'primitive';
+        }
+
+        function setup() {
+            if ("BroadcastChannel" in window) {
+                channel = new BroadcastChannel('foo');
+
+                function func(e) {
+
+                    if (getType(e.data) === 'blob') {
+                        var blob = e.data;
+
+                        var newImg = document.createElement("img"),
+                            url = URL.createObjectURL(blob);
+
+                        newImg.onload = function() {
+                            // no longer need to read the blob so it's revoked
+                            URL.revokeObjectURL(url);
+                        };
+
+                        newImg.src = url;
+                        var content = document.getElementById("content");
+                        content.innerHTML = "";
+                        content.appendChild(newImg);
+                        var closeChannel = document.getElementById("closeChannel");
+                        closeChannel.style.visibility = "visible";
+                        var openChannel = document.getElementById("openChannel");
+
+                    }
+                    if (getType(e.data) === 'date') {
+                        var myDate = e.data;
+                        var content = document.getElementById("content");
+                        content.innerHTML = "";
+                        content.innerHTML = "<h3>" + myDate.toLocaleDateString() + "</h3>";
+                    }
+                    if (getType(e.data) === 'primitive') {
+                        var myString = e.data;
+                        var content = document.getElementById("content");
+                        content.innerHTML = "";
+                        content.innerHTML = "<h3>" + myString + "</h3>";
+                    }
+                }
+                channel.onmessage = func;
+                var closeChannel = document.getElementById("closeChannel");
+                var openChannel = document.getElementById("openChannel");
+                closeChannel.onclick = function() {
+                    channel.close();
+                    channel = null;
+                    closeChannel.style.visibility = "hidden";
+                    openChannel.style.visibility = "visible";
+                }
+
+                openChannel.onclick = function() {
+                    setup();
+                }
+                openChannel.style.visibility = "hidden";
+                closeChannel.style.visibility = "visible";
+
+            }
+        }
+
+        function closeChannel() {
+            channel.close();
+        }
+        window.onload = setup();
+    </script>
+
+</body>
+
+</html>
