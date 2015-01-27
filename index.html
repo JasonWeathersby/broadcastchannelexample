@@ -7,42 +7,42 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 
-<body>
+<body class="mainbody">
 
-    <section class="indent-style">
+
         <!-- Section 1 -->
-        <section>
+        <section class="mainframe">
+            <h1>Message Source</h1>
             <nav>
-                <h1>Message Source</h1>
-                <div style="height:30px">
-                    <a class="btn" id="post">Post Blob</a>
-                    <a class="btn" id="postDate">Post Date</a>
-                    <a class="btn" id="postString">Post String</a>
-                </div>
-                <div>
-                    <a class="btn" id="postWorker">Post in Worker</a>
-                    <a class="btn" id="postIframe">Add Iframe</a>
-                </div>
+                <ul>
+                    <li><a class="btn" id="postIframe">Add Iframe</a></li>
+                    <li><a class="btn" id="post">Post Blob</a></li>
+                    <li><a class="btn" id="postDate">Post Date</a></li>
+                    <li><a class="btn" id="postString">Post String</a></li>
+                    <li><a class="btn" id="postWorker">Post in Worker</a></li>
+                    <div class="clearfix"></div>
+                </ul>
             </nav>
-            <section>
-                <img id="ffimg" src="images/firefox.png">
-            </section>
+
+            <img id="ffimg" src="images/firefox.png">
+
 
         </section>
 
         <!-- Section 2 -->
         <section>
-            <section>
                 <div id="iframetitle"></div>
                 <div id="content"></div>
-            </section>
         </section>
-    </section>
+
 
 
     <script type="application/javascript">
         var channel;
         var gBlob;
+
+        var sec1 = document.querySelector('.mainbody > section:first-of-type');
+        var sec2 = document.querySelector('.mainbody > section:last-of-type');
 
         function setupChannel() {
             if ("BroadcastChannel" in window) {
@@ -70,8 +70,7 @@
 
             div.innerHTML = "";
             var ifr = document.createElement("iframe");
-            ifr.style.width = "400px";
-            ifr.style.height = "335px";
+            ifr.style.height = '350px';
             ifr.setAttribute('src', "pagetwo.html");
             ifr.addEventListener("load", iframeLoaded, false);
             div.appendChild(ifr);
@@ -81,6 +80,10 @@
         function iframeLoaded() {
             var t = document.getElementById("iframetitle");
             t.innerHTML = "<h1>Iframe Message Target</h1>"
+            
+            sec1.className = sec1.className + ' flyleft';
+            sec2.className = sec2.className + ' flyrightfadein';
+            
         }
 
         function setup() {
