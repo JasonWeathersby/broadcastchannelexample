@@ -10,19 +10,44 @@
 }    
     
 
-body{
-	background:url(../images/bg-sandstone-2.png);
+.mainbody {
+	  background-color: #f39d41;
 	}
 
-body:after {
-	position:absolute;
-	top:0;
-	right:10px;
-	width:153px;
-	height:41px;
-	background:url(../images/tab-2.png);
-	content:'';
-	}
+.mainbody > section {
+  width: 320px;
+  background-image: linear-gradient(to right,#5696bc,#2f5168);
+  border: 10px solid #2f5168;
+  margin: 0 auto;
+  padding: 5px 20px 20px;
+}
+
+nav ul {
+  padding-bottom: 10px;
+}
+
+nav li {
+  list-style-type: none;
+  float: left;
+  width: 49%;
+  padding-bottom: 1%;
+  cursor: pointer;
+}
+
+nav li:first-child {
+  width: 100%;
+}
+
+nav li:nth-of-type(2), nav li:nth-of-type(4) {
+  padding-right: 1%;
+}
+
+nav ul {
+  padding: 0 0 20px 0;
+  width: 80%;
+  margin: 0 auto;
+}
+
 .btn {
   background: #3498db;
   background-image: -moz-linear-gradient(top, #3498db, #2980b9);
@@ -32,9 +57,13 @@ body:after {
   font-family: Arial;
   color: #ffffff;
   font-size: 12px;
-  padding: 6px 14px 6px 14px;
+  padding: 6px 0;
   text-decoration: none;
-  width: 100px
+  text-align: center;
+  display: block;
+  width: 100%;
+  box-shadow: 1px 1px 1px black;
+  text-shadow: 1px 1px 1px black;
 }
 
 .btn:hover {
@@ -43,10 +72,61 @@ body:after {
   background-image: linear-gradient(to bottom, #0095DD, #00539F);
   text-decoration: none;
 }
-    section { border:0px solid gray; padding:10px; overflow:hidden; }
-    section > section { float:left; }
-    .indent-1 { padding-left:120px; }
+
+.btn:active {
+  background: #0095DD;
+  background-image: -moz-linear-gradient(top, #0095DD, #00539F);
+  background-image: linear-gradient(to bottom, #0095DD, #00539F);
+  text-decoration: none;
+}
     
+
 h1 {
-		color: #4D4E53; font:bold 20px/1 'OpenSansRegular', sans-serif;
+    margin: 0 0 10px;
+    text-align: center;
+    letter-spacing: 0.1em;
+		color: #f39d41; font:bold 1.6em/1.3 'OpenSansRegular', sans-serif;
+    text-shadow: 0px 0px 2px black;
+}
+
+img {
+  width: 50%;
+  margin: 15%;
+  display: block;
+  margin: auto;
+  border: 10px solid #2f5168;
+}
+
+.clearfix {
+  clear: both;
+}
+
+/* the posh animation bit */
+
+.mainbody > section {
+  position: relative;
+}
+
+.mainbody > section:last-of-type {
+  opacity: 0;
+  z-index: 1;
+  bottom: 383px;
+}
+
+.flyleft {
+  animation: flyleftanim 0.6s 1 both;
+}
+
+.flyrightfadein {
+  animation: flyrightfadeinanim 0.6s 1 both;
+}
+
+@keyframes flyleftanim {
+  from { transform: translateX(0); }
+  to { transform: translateX(-52%); }
+}
+
+@keyframes flyrightfadeinanim {
+    from { transform: translateX(0);opacity:0; }
+  to { transform: translateX(52%);opacity:1; }
 }
