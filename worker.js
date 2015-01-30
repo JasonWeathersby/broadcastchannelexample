@@ -4,7 +4,9 @@ onmessage = function(e) {
     //worker standard message
     postMessage("Message from Worker");
     //Broadcast Channel Message with Worker
-    var workerChannel = new BroadcastChannel('foo');
-    workerChannel.postMessage("BroadcastChannel Message Sent from Worker");
-    workerChannel.close();
+    if ("BroadcastChannel" in window) {
+        var workerChannel = new BroadcastChannel('foo');
+        workerChannel.postMessage("BroadcastChannel Message Sent from Worker");
+        workerChannel.close();
+    }
 }

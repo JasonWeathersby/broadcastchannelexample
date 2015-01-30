@@ -10,50 +10,54 @@
 <body class="mainbody">
 
 
-        <!-- Section 1 -->
-        <section class="mainframe">
-            <h1>Message Source</h1>
-            <nav>
-                <ul>
-                    <li><a class="btn" id="postIframe">Add Iframe</a></li>
-                    <li><a class="btn" id="post">Post Blob</a></li>
-                    <li><a class="btn" id="postDate">Post Date</a></li>
-                    <li><a class="btn" id="postString">Post String</a></li>
-                    <li><a class="btn" id="postWorker">Post in Worker</a></li>
-                    <div class="clearfix"></div>
-                </ul>
-            </nav>
+    <!-- Section 1 -->
+    <section class="mainframe">
+        <h1>Message Source</h1>
+        <nav>
+            <ul>
+                <li><a class="btn" id="postIframe">Add Iframe</a>
+                </li>
+                <li><a class="btn" id="post">Post Blob</a>
+                </li>
+                <li><a class="btn" id="postDate">Post Date</a>
+                </li>
+                <li><a class="btn" id="postString">Post String</a>
+                </li>
+                <li><a class="btn" id="postWorker">Post in Worker</a>
+                </li>
+                <div class="clearfix"></div>
+            </ul>
+        </nav>
 
-            <img id="ffimg" src="images/firefox.png">
+        <img id="ffimg" src="images/firefox.png">
 
 
-        </section>
+    </section>
 
-        <!-- Section 2 -->
-        <section>
-                <div id="iframetitle"></div>
-                <div id="content"></div>
-        </section>
+    <!-- Section 2 -->
+    <section>
+        <div id="iframetitle"></div>
+        <div id="content"></div>
+    </section>
 
 
 
     <script type="application/javascript">
-        var channel;
-        var gBlob;
+        var broadcastExample = {};
 
         var sec1 = document.querySelector('.mainbody > section:first-of-type');
         var sec2 = document.querySelector('.mainbody > section:last-of-type');
 
-        function setupChannel() {
+        broadcastExample.setupChannel = function() {
             if ("BroadcastChannel" in window) {
-                if (typeof channel === 'undefined' || !channel) {
-                    channel = new BroadcastChannel('foo');
+                if (typeof broadcastExample.channel === 'undefined' || !broadcastExample.channel) {
+                    broadcastExample.channel = new BroadcastChannel('foo');
                 }
             }
         }
 
-        function postMessage() {
-            setupChannel();
+        broadcastExample.pMessage = function() {
+            broadcastExample.setupChannel();
             var img = document.getElementById("ffimg");
             var canvas = document.createElement("canvas");
             canvas.width = img.width;
@@ -61,54 +65,53 @@
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0);
             canvas.toBlob(function(blob) {
-                channel.postMessage(blob);
+                broadcastExample.channel.postMessage(blob);
             });
         }
 
-        function postIframe() {
+        broadcastExample.postIframe = function() {
             var div = document.getElementById("content");
 
             div.innerHTML = "";
             var ifr = document.createElement("iframe");
             ifr.style.height = '350px';
             ifr.setAttribute('src', "pagetwo.html");
-            ifr.addEventListener("load", iframeLoaded, false);
+            ifr.addEventListener("load", broadcastExample.iframeLoaded, false);
             div.appendChild(ifr);
 
         }
 
-        function iframeLoaded() {
+        broadcastExample.iframeLoaded = function() {
             var t = document.getElementById("iframetitle");
             t.innerHTML = "<h1>Iframe Message Target</h1>"
-            
+
             sec1.className = sec1.className + ' flyleft';
             sec2.className = sec2.className + ' flyrightfadein';
-            
+
         }
 
-        function setup() {
+        broadcastExample.setup = function() {
             var post = document.getElementById("post");
             post.onclick = function() {
-                postMessage();
+                broadcastExample.pMessage();
             }
-
             var post = document.getElementById("postIframe");
             post.onclick = function() {
-                postIframe();
+                broadcastExample.postIframe();
             }
             var postDate = document.getElementById("postDate");
             postDate.onclick = function() {
-                setupChannel();
-                channel.postMessage(new Date);
+                broadcastExample.setupChannel();
+                broadcastExample.channel.postMessage(new Date);
             }
             var postString = document.getElementById("postString");
             postString.onclick = function() {
-                setupChannel();
-                channel.postMessage("This is a test Broadcast String");
+                broadcastExample.setupChannel();
+                broadcastExample.channel.postMessage("This is a test Broadcast String");
             }
             var postWorker = document.getElementById("postWorker");
             postWorker.onclick = function() {
-                setupChannel();
+                broadcastExample.setupChannel();
                 if (!!window.Worker) {
                     var myWorker = new Worker("worker.js");
                     myWorker.onmessage = function(e) {
@@ -120,7 +123,7 @@
             }
 
         }
-        window.onload = setup();
+        window.onload = broadcastExample.setup();
     </script>
 
 

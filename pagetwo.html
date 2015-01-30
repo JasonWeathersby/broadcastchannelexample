@@ -19,8 +19,9 @@
         </section>
     </section>
     <script type="application/javascript">
-        var channel;
-        function getType(a) {
+        var broadcastFrame = {};
+
+        broadcastFrame.getType = function(a) {
             if (a === null || a === undefined)
                 return 'null';
             if (Array.isArray(a))
@@ -39,13 +40,15 @@
             return 'primitive';
         }
 
-        function setup() {
+        broadcastFrame.setup = function() {
             if ("BroadcastChannel" in window) {
-                channel = new BroadcastChannel('foo');
+                if (typeof broadcastFrame.channel === 'undefined' || !broadcastFrame.channel) {
+                    broadcastFrame.channel = new BroadcastChannel('foo');
+                }
 
                 function func(e) {
 
-                    if (getType(e.data) === 'blob') {
+                    if (broadcastFrame.getType(e.data) === 'blob') {
                         var blob = e.data;
 
                         var newImg = document.createElement("img"),
@@ -65,42 +68,40 @@
                         var openChannel = document.getElementById("openChannel");
 
                     }
-                    if (getType(e.data) === 'date') {
+                    if (broadcastFrame.getType(e.data) === 'date') {
                         var myDate = e.data;
                         var content = document.getElementById("content");
                         content.innerHTML = "";
                         content.innerHTML = "<h3>" + myDate.toLocaleDateString() + "</h3>";
                     }
-                    if (getType(e.data) === 'primitive') {
+                    if (broadcastFrame.getType(e.data) === 'primitive') {
                         var myString = e.data;
                         var content = document.getElementById("content");
                         content.innerHTML = "";
                         content.innerHTML = "<h3>" + myString + "</h3>";
                     }
                 }
-                channel.onmessage = func;
+                broadcastFrame.channel.onmessage = func;
                 var closeChannel = document.getElementById("closeChannel");
                 var openChannel = document.getElementById("openChannel");
                 closeChannel.onclick = function() {
-                    channel.close();
-                    channel = null;
+                    if (!(typeof broadcastFrame.channel === 'undefined' || !broadcastFrame.channel)) {
+                        broadcastFrame.channel.close();
+                        broadcastFrame.channel = null;
+                    }
                     closeChannel.style.visibility = "hidden";
                     openChannel.style.visibility = "visible";
                 }
 
                 openChannel.onclick = function() {
-                    setup();
+                    broadcastFrame.setup();
                 }
                 openChannel.style.visibility = "hidden";
                 closeChannel.style.visibility = "visible";
 
             }
         }
-
-        function closeChannel() {
-            channel.close();
-        }
-        window.onload = setup();
+        window.onload = broadcastFrame.setup();
     </script>
 
 </body>
